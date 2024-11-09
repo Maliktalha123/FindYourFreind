@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -13,4 +13,4 @@ const userSchema = new Schema({
 });
 
 
-export const UserModal = mongoose.model('users',userSchema)
+export const UserModal = mongoose.models.users || mongoose.model('users',userSchema)
