@@ -5,11 +5,10 @@ import jwt from "jsonwebtoken";
 
 export async function GET(request) {
   connectDB();
-
   const users = await UserModal.find();
   return Response.json(
     {
-      msg: "USers fetched successfully......",
+      msg: "USers fetched success.fully......",
       users,
     },
     { status: 200 }
@@ -35,15 +34,12 @@ export async function POST(request) {
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(obj.password, saltRounds);
   obj.password = hashedPassword;
-  console.log("Object => ", obj);
   let newUser = new UserModal(obj);
   await newUser.save();
-  console.log("creating userr...");
   let token = jwt.sign(
     { id: newUser._id, role: newUser.role },
     process.env.JWT_KEY
   );
-  console.log(" token");
   return Response.json(
     { msg: "User Added Successfully", user: newUser, token },
 
