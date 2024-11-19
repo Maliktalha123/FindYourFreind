@@ -3,18 +3,7 @@ import { UserModal } from "@/lib/models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-export async function GET(request) {
-  connectDB();
 
-  const users = await UserModal.find();
-  return Response.json(
-    {
-      msg: "USers fetched successfully......",
-      users,
-    },
-    { status: 200 }
-  );
-}
 
 export async function POST(request) {
   await connectDB();
@@ -46,7 +35,7 @@ export async function POST(request) {
 
   let token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_KEY);
   return Response.json(
-    { msg: "User Added Successfully", user, token },
+    { msg: "User Login Successfully", user, token },
     { status: 201 }
   );
 }
