@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { uploadImage } from "@/actions/upload";
 
 export function AddCategory() {
   const [open, setOpen] = React.useState(false);
@@ -69,16 +70,40 @@ export function AddCategory() {
   );
 }
 
-function ProfileForm({ className }) {
+ function ProfileForm({ className }) {
+  const handleAddCategory =async (formData) => {
+    console.log("Form Data => ", formData);
+    const file = formData.get("thumbnail")
+    console.log("File => ",file)
+const uploadLink = await uploadImage(formData)
+    console.log("uploadLink => ," ,uploadLink)
+  };
   return (
-    <form className={cn("grid items-start gap-4", className)}>
+    <form
+      action={handleAddCategory}
+      className={cn("grid items-start gap-4", className)}
+    >
       <div className="grid gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input type="email" id="email" placeholder="shadcn@example.com" />
+        <Label htmlFor="title">Title</Label>
+        <Input name="title" type="title" id="title" placeholder="Enter Title" />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="username">Username</Label>
-        <Input id="username" placeholder="@shadcn" />
+        <Label htmlFor="discription">Discription</Label>
+        <Input
+          name="discription"
+          type="discription"
+          id="discription"
+          placeholder="Enter Discription"
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="thumbnail">Thumbnail</Label>
+        <Input
+          type="file"
+          name="thumbnail"
+          id="thumbnail"
+          placeholder="Enter Thumbnail"
+        />
       </div>
       <Button type="submit">Save changes</Button>
     </form>
