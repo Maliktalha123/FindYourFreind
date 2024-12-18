@@ -1,3 +1,4 @@
+import { getCategories } from "@/actions/categories";
 import { AddCategory } from "@/components/AddCategory/AddCategory";
 import {
   Table,
@@ -8,39 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { CategoryModal } from "@/lib/models/Category";
 import Image from "next/image";
 
-export default function Categories() {
-  const categories = [
-    {
-      id: "1",
-      title: "Sports",
-      thumbnail:
-        "https://images.unsplash.com/photo-1663893364107-a6ecd06cf615?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D",
-      discription: "All community will be have Sports skills",
-    },
-    {
-      id: "2",
-      title: "Indoor Games",
-      thumbnail:
-        "https://images.unsplash.com/photo-1663893364107-a6ecd06cf615?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D",
-      discription: "All community will be have Indoor skills",
-    },
-    {
-      id: "3",
-      title: "Climbing",
-      thumbnail:
-        "https://images.unsplash.com/photo-1663893364107-a6ecd06cf615?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D",
-      discription: "All community will be have Climbing skills",
-    },
-    {
-      id: "4",
-      title: "Cricket",
-      thumbnail:
-        "https://images.unsplash.com/photo-1663893364107-a6ecd06cf615?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D",
-      discription: "All community will be have Cricket skills",
-    },
-  ];
+export default async function Categories() {
+  const categories =await getCategories()
+  console.log('categories => ', categories)
   return (
     <div className="min-h-screen">
       <div className="flex justify-around items-center py-6">
@@ -58,8 +32,8 @@ export default function Categories() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {categories.map((data) => (
-            <TableRow key={data.id}>
+          {categories?.categories?.map((data) => (
+            <TableRow key={data._id}>
               <TableCell className="font-medium">{data.title}</TableCell>
               <TableCell>
                 <Image

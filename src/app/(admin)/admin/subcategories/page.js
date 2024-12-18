@@ -1,3 +1,4 @@
+import { getSubCategories } from "@/actions/subcategories";
 import { AddSubcategory } from "@/components/AddSubcategory/AddSubcategory";
 import {
   Table,
@@ -10,7 +11,9 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 
-export default function Subcategories() {
+export default async function Subcategories() {
+  const subcategor = await getSubCategories();
+  console.log("S ---------ubCategories => ",subcategor)
   const subcategories = [
     {
       id: "2",
@@ -40,12 +43,14 @@ export default function Subcategories() {
   return (
     <div className="min-h-screen">
       <div className="flex justify-around items-center py-6">
-<h1 className="font-bold text-xl">SubCategories</h1>
+        <h1 className="font-bold text-xl">SubCategories</h1>
         <AddSubcategory />
       </div>
       <Table>
-        <TableCaption>A list of your  SubCategories</TableCaption>
+        <TableCaption>A list of your SubCategories</TableCaption>
         <TableHeader>
+
+          
           <TableRow>
             <TableHead>Image</TableHead>
             <TableHead>Title</TableHead>
@@ -54,20 +59,20 @@ export default function Subcategories() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {subcategories.map((data) => (
-            <TableRow key={data.id}>
+          {subcategor?.subCategories?.map((subCat) => (
+            <TableRow key={subCat._id}>
               <TableCell>
                 <Image
-                  src={data.thumbnail}
+                  src={subCat.thumbnail}
                   width={70}
                   height={70}
-                  alt={`${data.title}'s Image`}
+                  alt={`${subCat.title}'s Image`}
                 />
               </TableCell>
-              <TableCell className="font-medium">{data.title}</TableCell>
-              <TableCell className="font-medium">{data.category}</TableCell>
+              <TableCell className="font-medium">{subCat.title}</TableCell>
+              <TableCell className="font-medium">{subCat?.category?.title}</TableCell>
 
-              <TableCell>{data.discription}</TableCell>
+              <TableCell>{subCat.discription}</TableCell>
             </TableRow>
           ))}
         </TableBody>

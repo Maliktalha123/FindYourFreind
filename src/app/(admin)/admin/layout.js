@@ -4,9 +4,9 @@ import { auth } from "../../../../auth";
 import { redirect } from "next/navigation";
 
 export default async function AdminLayout({ children }) {
-  const session = await auth();
-  console.log("Session => ", session);
-  if (!session) return redirect("/signin");
+  // const session = await auth();
+  // console.log("Session => ", session);
+  // if (!session) return redirect("/signin");
 
   return (
     <html lang="en">

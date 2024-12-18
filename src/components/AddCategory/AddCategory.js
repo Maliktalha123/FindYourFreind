@@ -1,7 +1,10 @@
 "use client";
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast"
+
 import {
   Dialog,
   DialogContent,
@@ -10,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
 import {
   Drawer,
   DrawerClose,
@@ -23,10 +27,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { uploadImage } from "@/actions/upload";
+import { addCategory } from "@/actions/categories";
 
 export function AddCategory() {
   const [open, setOpen] = React.useState(false);
+
   const isDesktop = true;
+  
 
   if (isDesktop) {
     return (
@@ -70,16 +77,30 @@ export function AddCategory() {
   );
 }
 
- function ProfileForm({ className }) {
-  const handleAddCategory =async (formData) => {
-    console.log("Form Data => ", formData);
-    const file = formData.get("thumbnail")
-    console.log("File => ",file)
-const uploadLink = await uploadImage(formData)
-    console.log("uploadLink => ," ,uploadLink)
+function ProfileForm({ className }) {
+  const [loading,setLoading] = React.useState(false)
+  const formRef = useRef()
+  const { toast } = useToast()
+  const handleAddCategory = async (formData) => {
+    setLoading(true)
+    const uploadLink = await uploadImage(formData);   
+    const categoryObject = {
+      title: formData.get("title"),
+      discription: formData.get("discription"),
+      thumbnail: uploadLink,
+    };
+    console.log("uploadLink => ,", uploadLink);
+    await addCategory(categoryObject);
+    toast({
+      title: "Category added successfully...",
+      description: "Friday, February 10, 2023 at 5:57 PM",
+    })
+    formRef?.current?.reset()
+    setLoading(false)
   };
   return (
     <form
+    ref={formRef}
       action={handleAddCategory}
       className={cn("grid items-start gap-4", className)}
     >
@@ -105,7 +126,7 @@ const uploadLink = await uploadImage(formData)
           placeholder="Enter Thumbnail"
         />
       </div>
-      <Button type="submit">Save changes</Button>
+      <Button disabled={loading} type="submit">{loading ? "Loading...":"Add Category"}</Button>
     </form>
   );
 }
