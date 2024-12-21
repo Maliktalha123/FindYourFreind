@@ -13,19 +13,23 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 
-export default async function Subcategories() {
-  const subcategor = await getSubCategories();
+export default async function Subcategories({ searchParams }) {
+  console.log("Search Params => ", searchParams);
+  const subcategor = await getSubCategories(searchParams?.category);
   const categories = await getCategories();
   const cat = categories.categories;
-  // console.log("Categories => ... ", cat);
+  console.log("Categories => ... ", cat);
+
   return (
     <div className="min-h-screen">
       <div className="flex justify-around items-center py-6">
         <h1 className="font-bold text-xl">SubCategories</h1>
         <div className="flex gap-2">
-
-        <CategoryDropdown placeholder="Select CategorY" dropdownValues={cat} />
-        <AddSubcategory />
+          <CategoryDropdown
+            placeholder="Select CategorY"
+            dropdownValues={cat}
+          />
+          <AddSubcategory categories={cat} />
         </div>
       </div>
       <Table>

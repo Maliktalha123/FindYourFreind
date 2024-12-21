@@ -11,6 +11,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Drawer,
   DrawerClose,
   DrawerContent,
@@ -22,8 +29,13 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import CategoryDropdown from "../CategoryDropdown/CategoryDropdown";
+import { getCategories } from "@/actions/categories";
+import { useToast } from "@/hooks/use-toast";
+import { uploadImage } from "@/actions/upload";
+import { addSubCategory } from "@/actions/subcategories";
 
-export function AddSubcategory() {
+export function AddSubcategory({ categories }) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = true;
 
@@ -40,7 +52,7 @@ export function AddSubcategory() {
               Add Subcategory here. Click save when you're done.
             </DialogDescription>
           </DialogHeader>
-          <ProfileForm />
+          <ProfileForm categories={categories} />
         </DialogContent>
       </Dialog>
     );
@@ -69,17 +81,60 @@ export function AddSubcategory() {
   );
 }
 
-function ProfileForm({ className }) {
+function ProfileForm({ className, categories }) {
+  const [loading, setLoading] = React.useState(false);
+  const formRef = React.useRef();
+  const { toast } = useToast();
+  const handleAddSubcategory = async (formData) => {
+    setLoading(true);
+    const uploadLink = await uploadImage(formData);
+    const categoryObject = {
+      title: formData.get("title"),
+      discription: formData.get("discription"),
+      category: formData.get("category"),
+      thumbnail: uploadLink,
+    };
+    console.log("uploadLink => ,", uploadLink);
+    await addSubCategory(categoryObject);
+    toast({
+      title: "Category added successfully...",
+      description: "Friday, February 10, 2023 at 5:57 PM",
+    });
+    formRef?.current?.reset();
+    setLoading(false);
+  };
+
   return (
-    <form className={cn("grid items-start gap-4", className)}>
+    <form
+      className={cn("grid items-start gap-4", className)}
+      ref={formRef}
+      action={handleAddSubcategory}
+    >
       <div className="grid gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input type="email" id="email" placeholder="shadcn@example.com" />
+        <Label htmlFor="title">Title</Label>
+        <Input type="title" id="title" name = "title" placeholder="Sports..." />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="username">Username</Label>
-        <Input id="username" placeholder="@shadcn" />
+        <Label htmlFor="discription">Discription</Label>
+        <Input id="discription" name="discription" placeholder="Description" />
       </div>
+      <div className="grid gap-2">
+        <Label htmlFor="thumbnail">Thumbnail</Label>
+        <Input required name="thumbnail" type="file" />
+      </div>
+
+      <Select name="category">
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select CategorY" />
+        </SelectTrigger>
+        <SelectContent>
+          {categories.map((data) => (
+            <SelectItem value={data._id} key={data._id}>
+              {data.title}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       <Button type="submit">Save changes</Button>
     </form>
   );
