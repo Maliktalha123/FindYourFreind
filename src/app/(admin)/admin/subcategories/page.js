@@ -18,7 +18,7 @@ export default async function Subcategories({ searchParams }) {
   const subcategor = await getSubCategories(searchParams?.category);
   const categories = await getCategories();
   const cat = categories.categories;
-  console.log("Categories => ... ", cat);
+  console.log("SubCategories => ... ", subcategor);
 
   return (
     <div className="min-h-screen">

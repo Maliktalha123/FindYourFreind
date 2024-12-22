@@ -19,7 +19,7 @@ export const getSubCategories = async (category) => {
   }
   let subcategories = await fetch(url);
   subcategories = await subcategories.json();
-  console.log("SubCategories Successfully fetched...");
+  console.log("SubCategories Successfully fetched....", subcategories);
   return subcategories;
   revalidatePath("/admin/subcategories");
 };
