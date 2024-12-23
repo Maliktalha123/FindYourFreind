@@ -12,9 +12,12 @@ const eventSchema = new Schema({
     lat: Number,
     long: Number,
   },
-  profileImg: String,
-  createBy: { type: mongoose.Types.ObjectId, ref: "users" },
-  bio: String,
+  address: String,
+  thumbnail: String,
+  category: { type: mongoose.Types.ObjectId, ref: "categories" },
+  subcategory: { type: mongoose.Types.ObjectId, ref: "subcategories" },
+  createdBy: { type: mongoose.Types.ObjectId, ref: "users" },
+  going: [{ type: mongoose.Types.ObjectId, ref: "users" }],
 });
-
-export const EventModal = mongoose.model("events", eventSchema);
+export const EventModal =
+  mongoose.models.events || mongoose.model("events", eventSchema);
