@@ -13,18 +13,21 @@ import Image from "next/image";
 import { getEvent } from "@/actions/events";
 import { getSubCategories } from "@/actions/subcategories";
 import { getCategories } from "@/actions/categories";
-import { AddEventForm } from "@/components/AddEventSheet/AddEventSheet";
+import EventForm from "@/components/AddEventSheet/AddEventSheet";
 
 export default async function Events() {
   const events = await getEvent();
-  const { categories } = await getCategories();
-  console.log("Event", events);
+  const categories = await getCategories();
+  const subcategories = await getSubCategories();
   // const session = await auth();
   return (
     <div className="min-h-screen mx-10">
       <div className="flex justify-between items-center my-4">
         <h1 className="font-bold text-xl">Events</h1>
-        <AddEventForm />
+        <EventForm
+          categories={categories.categories}
+          subcategories={subcategories.subCategories}
+        />
       </div>
       <Table>
         <TableCaption>A list of your recent events.</TableCaption>
